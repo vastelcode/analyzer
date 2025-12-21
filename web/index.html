@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask Кнопка</title>
+</head>
+<body>
+    <h1>Демонстрация Flask</h1>
+    <button class="btn">Вывод</button>
+
+    <script>
+
+        let button = document.querySelector('.btn')
+
+        function sendMessage() {
+            fetch('/send_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert('Сообщение отправлено в консоль!');
+                } else {
+                    alert('Ошибка: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка запроса:', error);
+                alert('Произошла ошибка сети.');
+            });
+        }
+
+        button.onclick = sendMessage
+    </script>
+</body>
+</html>
