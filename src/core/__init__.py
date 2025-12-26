@@ -1,4 +1,5 @@
 from ..modules.input import Input
+from ..modules.styled_print import StyledPrint
 
 class Core:
 
@@ -14,7 +15,8 @@ class Core:
      user_data = self.input_manager.run()
     
     # поиск
+    #  StyledPrint().demo()
 
-     print(user_data)
+    #  print(user_data)
 
 

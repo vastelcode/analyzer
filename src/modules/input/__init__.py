@@ -4,6 +4,7 @@ from ...data.questionary import prompts
 from ...data.extensions import extensions
 from ...data.ready_regex import ready_regex
 
+from ..styled_print import styled_print
 from ..validation import validator
 
 
@@ -46,8 +47,9 @@ class Input:
       # выбор типа поиска
       type_search = prompt(**prompts['type_search'])
 
+
       # получаем список регулярных выражений
-      regex_list = map_regex(self.get_list(ready_regex,'Регулярные выражения', validator.validate_regex, 'Регулярное выражение'))
+      regex_list = map_regex(self.get_list(list(ready_regex.keys()),'Регулярные выражения', validator.validate_regex, 'Регулярное выражение'))
 
       return {
          'mode_work': mode_work,
@@ -61,7 +63,7 @@ class Input:
 
     except Exception as exc:
         
-        print(f'Analyzer Input Error: {exc}')
+        styled_print.error(f'Analyzer Input Error: {exc}')
   
   def get_list(self,set_values, header, validator, header_option):
      
@@ -69,7 +71,7 @@ class Input:
 
     # спрашиваем нужно ли выводить список
 
-    change_show = input('Выводить список (y)? ')
+    change_show = input(styled_print.italic('Выводить список (y) ? ',is_print=False))
 
     if change_show.strip().lower() == 'y':
          show_list(list=set_values)
