@@ -18,23 +18,23 @@ class Core:
      try:
 
     #  получаем данные пользователя
-      # user_data = self.input_manager.run()
+      user_data = self.input_manager.run()
     
-      user_data = {
-        'type_search': 'deep',
-        'mode_work': 'fs',
-        'area_work': '/home/maksim/Тест',
-        'regex_list': ['def',ready_regex['date']],
-        'extensions_list':['.py','.txt','.md'],
-        'output_place': 'console'
-     }
+    #   user_data = {
+    #     'type_search': 'deep',
+    #     'mode_work': 'fs',
+    #     'area_work': '/home/maksim/Тест',
+    #     'regex_list': ['def',ready_regex['date']],
+    #     'extensions_list':['.py','.txt','.md'],
+    #     'output_place': '/home/maksim/Тест/result.txt'
+    #  }
     
     # поиск
       result_search = Search(user_data).run()
 
     
     # вывод результатов
-      output.run(result_search)
+      output.run(result_search, user_data['output_place'])
 
     #  print(user_data)
      except KeyboardInterrupt:

@@ -96,7 +96,7 @@ class Search:
               
               result[path_file].append(
                  {
-                    f'line {index + 1}': line
+                    f'{index + 1}': line
                  }
               )
               
