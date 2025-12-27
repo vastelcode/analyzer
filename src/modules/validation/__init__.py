@@ -8,11 +8,11 @@ class Validation():
 
   def validate_extension(self,ext):
 
-    if ext in extensions:
+    if f'.{ext}' in extensions:
 
       return {'result': True}
     
-    return {'result': False, 'error_message': f'Расширение {ext} недоступно. '}
+    return {'result': False, 'error_message': f'Расширение .{ext} недоступно. '}
   
   def validate_regex(self, regex):
 
@@ -52,6 +52,16 @@ class Validation():
     
     else:
       return {'result': True}
+  
+  def validate_file(self, path):
+
+    if os.path.isfile(path) or path.strip().lower() == 'console' :
+
+      return {'result': True}
+    
+    else:
+
+      return {'result': False, 'error_message': f'{path} не является файлом'}
 
 
 

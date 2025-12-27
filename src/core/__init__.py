@@ -1,5 +1,9 @@
 from ..modules.input import Input
-from ..modules.styled_print import StyledPrint
+from ..modules.search import Search
+from ..modules.styled_print import styled_print
+from ..modules.output import output
+
+from ..data.ready_regex import ready_regex
 
 class Core:
 
@@ -8,15 +12,33 @@ class Core:
       self.config = config
 
       self.input_manager = Input()
-  
+
   def run(self):
      
+     try:
+
     #  получаем данные пользователя
-     user_data = self.input_manager.run()
+      # user_data = self.input_manager.run()
+    
+      user_data = {
+        'type_search': 'deep',
+        'mode_work': 'fs',
+        'area_work': '/home/maksim/Тест',
+        'regex_list': ['def',ready_regex['date']],
+        'extensions_list':['.py','.txt','.md'],
+        'output_place': 'console'
+     }
     
     # поиск
-    #  StyledPrint().demo()
+      result_search = Search(user_data).run()
+
+    
+    # вывод результатов
+      output.run(result_search)
 
     #  print(user_data)
+     except KeyboardInterrupt:
+        
+        styled_print.error("Работа аварийно завершена !")
 
 

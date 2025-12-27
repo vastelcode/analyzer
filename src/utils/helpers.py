@@ -58,7 +58,7 @@ def input_mode(text, validator):
    
    while True:
    
-    value = input(styled_print.highlight('? ' + text, is_print=False))
+    value = input(styled_print.styled_text('? ', is_print=False) + styled_print.highlight(text, is_print=False))
 
     check = validator(value)
 
@@ -95,4 +95,13 @@ def show_list(list, header='List'):
         else:
            styled_print.list_item(f'{name}')
 
+# функция для добавления точки
+def added_point(extensions):
+   
+   for index,extension in enumerate(extensions):
+      
+      extensions[index] = f'.{extension}'
+  
+   return extensions
+      
 

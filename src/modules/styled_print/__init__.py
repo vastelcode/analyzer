@@ -27,7 +27,7 @@ class StyledPrint:
 
         self.config =  {
             'primary_color': ANSI_CODES['bright_cyan'],
-            'secondary_color': ANSI_CODES['bright_blue'],
+            'secondary_color': ANSI_CODES['cyan'],
             'success_color': ANSI_CODES['bright_green'],
             'error_color': ANSI_CODES['bright_red'],
             'warning_color': ANSI_CODES['bright_yellow'],
@@ -53,13 +53,14 @@ class StyledPrint:
         self.styles = {
             'header': f"{c['primary_color']}{c['bold']}",
             'subheader': f"{c['secondary_color']}{c['bold']}",
+            'styled_text': f"{c['secondary_color']}",
             'text': f"{c['text_color']}",
             'success': f"{c['success_color']}{c['bold']}",
             'error': f"{c['error_color']}{c['bold']}",
             'warning': f"{c['warning_color']}{c['bold']}",
             'info': f"{c['info_color']}{c['bold']}",
             'muted': f"{c['muted_color']}{c['dim']}",
-            'highlight': f"{c['primary_color']}{c['bold']}",
+            'highlight': f"{c['text_color']}{c['bold']}",
             'bold': f"{c['bold']}",
             'underline': f"{c['underline']}",
             'italic': f"{c['italic']}",
@@ -114,6 +115,11 @@ class StyledPrint:
         """
         return self.print(text, style='header', is_print=is_print, **kwargs)
     
+    def styled_text(self, text, is_print=True, **kwargs):
+        
+        return self.print(text, style='styled_text', is_print=is_print, **kwargs)
+    
+    
     def subheader(self, text, is_print=True, **kwargs):
         """
         Форматирует и/или выводит подзаголовок.
@@ -154,7 +160,7 @@ class StyledPrint:
         Returns:
             str: Отформатированная строка.
         """
-        return self.print(' ✓ ' + text, style='success', is_print=is_print, **kwargs)
+        return self.print('✓ ' + text, style='success', is_print=is_print, **kwargs)
     
     def error(self, text, is_print=True, **kwargs):
         """
@@ -168,7 +174,7 @@ class StyledPrint:
         Returns:
             str: Отформатированная строка.
         """
-        return self.print(' ✗ ' + text, style='error', is_print=is_print, **kwargs)
+        return self.print('✗ ' + text, style='error', is_print=is_print, **kwargs)
     
     def warning(self, text, is_print=True, **kwargs):
         """
@@ -182,7 +188,7 @@ class StyledPrint:
         Returns:
             str: Отформатированная строка.
         """
-        return self.print(' ⚠ ' + text, style='warning', is_print=is_print, **kwargs)
+        return self.print('⚠ ' + text, style='warning', is_print=is_print, **kwargs)
     
     def info(self, text, is_print=True, **kwargs):
         """
@@ -196,7 +202,7 @@ class StyledPrint:
         Returns:
             str: Отформатированная строка.
         """
-        return self.print(' ℹ ' + text, style='info', is_print=is_print, **kwargs)
+        return self.print('ℹ ' + text, style='info', is_print=is_print, **kwargs)
     
     def muted(self, text, is_print=True, **kwargs):
         """

@@ -1,4 +1,4 @@
-from ...utils.helpers import prompt, option, show_list, input_mode
+from ...utils.helpers import prompt, option, show_list, input_mode, added_point
 from ...utils.mappers import map_regex
 from ...data.questionary import prompts
 from ...data.extensions import extensions
@@ -14,6 +14,8 @@ class Input:
 
   # запуск пользователься ввода
   def run(self):
+
+    styled_print.info('Ввод данных...')
 
     try:
 
@@ -33,7 +35,8 @@ class Input:
 
           # сразу здесь получаем расширения файлов
 
-          result['extensions'] = self.get_list(extensions,'Расширения', validator.validate_extension, 'Расширение')
+          result['extensions'] = added_point(self.get_list(extensions,'Расширения', validator.validate_extension, 'Расширение'))
+          
       
       else:
          
@@ -51,12 +54,19 @@ class Input:
       # получаем список регулярных выражений
       regex_list = map_regex(self.get_list(list(ready_regex.keys()),'Регулярные выражения', validator.validate_regex, 'Регулярное выражение'))
 
+      # получаем место вывода результата
+
+      output_place = input_mode('Определите место вывода результата (console) - ', validator.validate_file)
+
+      styled_print.success('Операция ввода успешно завершена !')
+
       return {
          'mode_work': mode_work,
          'area_work': area_work,
          'type_search': type_search,
          'extensions_list': extensions_list,
-         'regex_list': regex_list
+         'regex_list': regex_list,
+         'output_place': output_place
       }
 
 
