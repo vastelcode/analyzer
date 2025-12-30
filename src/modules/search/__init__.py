@@ -9,7 +9,7 @@ class Search:
         self.data = user_data
 
     # функция для поиска файлов в директории, возвращает массив файлов
-    def get_files(self, root_directory, type_search, extensions):
+    def get_files(self, root_directory, type_search, extensions,folders_exceptions):
         """
         Docstring для get_files
         
@@ -50,11 +50,17 @@ class Search:
                 else:
                     # проходимся по всем папкам
                     for dir in dirs:
+                        
+                        # если папка находится в исключениях, то пропускаем
+                        if os.path.join(root_directory,dir) in folders_exceptions:
+                            continue
+                        
                         # проходимся глубоким поиском принимая данную папку за корневую
                         result = self.get_files(
                             os.path.join(root_directory, dir),
                             'deep',
-                            extensions=extensions
+                            extensions=extensions,
+                            folders_exceptions=folders_exceptions
                         )
 
                         # добавляем результат в найденные ранее файлы
@@ -73,7 +79,6 @@ class Search:
 
         # читаем файл
         with open(path_file, 'r') as file:
-            result.setdefault(path_file, [])
 
             # разбираем файл на строки
             for index, line in enumerate(file):
@@ -93,14 +98,15 @@ class Search:
         return result
 
     # поиск по файловой системе
-    def search_fs(self, directory, type_search, regex_list, extensions_list):
+    def search_fs(self, directory, type_search, regex_list, extensions_list, folders_exceptions):
         styled_print.info('Поиск...')
 
         # получаем все файлы
         all_files = self.get_files(
             directory,
             type_search,
-            extensions=extensions_list
+            extensions=extensions_list,
+            folders_exceptions=folders_exceptions
         )
 
         all_results = {}
@@ -123,7 +129,8 @@ class Search:
                 directory=user_data['area_work'],
                 type_search=user_data['type_search'],
                 regex_list=user_data['regex_list'],
-                extensions_list=user_data['extensions_list']
+                extensions_list=user_data['extensions_list'],
+                folders_exceptions=user_data['folders_exceptions']
             )
 
         styled_print.success('Операция поиска успешно завершена')

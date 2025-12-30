@@ -1,4 +1,4 @@
-from ...utils.helpers import prompt, option, show_list, input_mode, added_point
+from ...utils.helpers import prompt, option, show_list, input_mode, added_point, middleware_folders
 from ...utils.mappers import map_regex
 from ...data.questionary import prompts
 from ...data.extensions import extensions
@@ -19,40 +19,43 @@ class Input:
 
     try:
 
-      # выбор типа работы
-      mode_work = prompt(**prompts['mode_work'])
+      # выбор области работы
+      area_work = input_mode('Определите область работы - ', validator.validate_dir)
 
-      # ввод области работы и расширений
+      # выбор расширений
+      extensions_list = added_point(self.get_list(
+         header='Расширения',
+         set_values=extensions,
+         validator=validator.validate_extension,
+         min_value=0
+      ))
 
-      result = {
-         'area': None,
-         'extensions': []
-      }
-
-      if mode_work == 'fs':
-          
-          result['area'] = input_mode('Определите область работы - ', validator.validate_dir)
-
-          # сразу здесь получаем расширения файлов
-
-          result['extensions'] = added_point(self.get_list(extensions,'Расширения', validator.validate_extension, 'Расширение'))
-          
-      
-      else:
-         
-         result['area'] = input_mode('Определите область работы - ', validator.validate_url)
-
-         result['extensions'] = []
-      
-      area_work = result['area']
-      extensions_list = result['extensions']
 
       # выбор типа поиска
       type_search = prompt(**prompts['type_search'])
 
+      folders_exceptions = []
+
+      # если глубокий поиск, то запрашиваем папки-исключения
+      if type_search == 'deep':
+         
+         folders_exceptions = self.get_list(
+         header='Папки-исключения',
+         validator=validator.validate_folders,
+         middleware_list=[middleware_folders,area_work],
+         min_value=-1
+      )
+      
+         
+
 
       # получаем список регулярных выражений
-      regex_list = map_regex(self.get_list(list(ready_regex.keys()),'Регулярные выражения', validator.validate_regex, 'Регулярное выражение'))
+      regex_list = map_regex(self.get_list(
+         header='Регулярные выражения',
+         set_values=list(ready_regex.keys()),
+         validator=validator.validate_regex,
+         min_value=0
+      ))
 
       # получаем место вывода результата
 
@@ -61,10 +64,11 @@ class Input:
       styled_print.success('Операция ввода успешно завершена !')
 
       return {
-         'mode_work': mode_work,
+         'mode_work': 'fs',
          'area_work': area_work,
          'type_search': type_search,
          'extensions_list': extensions_list,
+         'folder_exceptions': folders_exceptions,
          'regex_list': regex_list,
          'output_place': output_place
       }
@@ -75,20 +79,21 @@ class Input:
         
         styled_print.error(f'Analyzer Input Error: {exc}')
   
-  def get_list(self,set_values, header, validator, header_option):
+  def get_list(self, header, validator,min_value, set_values=None, middleware_list=None):
      
     print(f'? {"\033[1;96m"}{header}{'\033[0m'}')
 
-    # спрашиваем нужно ли выводить список
+    if set_values:
+      # спрашиваем нужно ли выводить список
 
-    change_show = input(styled_print.italic('Выводить список (y) ? ',is_print=False))
+      change_show = input(styled_print.italic('Выводить список (y) ? ',is_print=False))
 
-    if change_show.strip().lower() == 'y':
+      if change_show.strip().lower() == 'y':
          show_list(list=set_values)
          
 
     # запрашиваем список регулярных выражений
-    result_list = option(header_option, check_method=validator, pointer=' ? ')
+    result_list = option( check_method=validator, min_length=min_value, middleware_list=middleware_list)
 
     return result_list
 

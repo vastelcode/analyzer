@@ -5,25 +5,23 @@ class Output:
   def enumeration_result(self,result, function, function_s = False):
     styled_print.info('Вывод...')
 
+    #  result в данном случае объект вида {file_name: [{'line index': line}]}
+
     if not bool(function_s):
        function_s = function
 
-    for value in result.values():
-         
-        #  value в данном случае объект вида {file_name: [{'line index': line}]}
-
-        for file_name, lines in value.items():
+    for file_name,lines in result.items():
            
-           if len(value[file_name]) == 0:
-              continue
+     if len(lines) == 0:
+       continue
            
-           function(f'Файл {file_name} \n')
+     function(f'Файл {file_name} \n')
 
-           for line in lines:
+     for line in lines:
               
-              for line_index, line_value in line.items():
+       for line_index, line_value in line.items():
                  
-                 function_s(f'{line_index}. {line_value} ')
+           function_s(f'{line_index}. {line_value} ')
 
   def run(self,result,output_place):
         

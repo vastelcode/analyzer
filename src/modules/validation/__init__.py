@@ -62,7 +62,19 @@ class Validation():
     else:
 
       return {'result': False, 'error_message': f'{path} не является файлом'}
+  
+  def validate_folders(self,path):
 
+    if path == '/':
+
+      return {'result': False, 'error_message': f'Текущую директорию нельзя внести в исключения'}
+    
+    if not os.path.isdir(path):
+
+      return {'result': False, 'error_message': f'Такой директории {path} не существует'}
+    
+    else:
+      return {'result': True}
 
 
 

@@ -5,6 +5,7 @@ from ..data.extensions import extensions
 from ..modules.styled_print import styled_print
 
 from re import compile
+from os.path import join
 
 def prompt(questionary, map_key, allowed, parameter):
     
@@ -20,7 +21,7 @@ def prompt(questionary, map_key, allowed, parameter):
 
     return value
 
-def option( parametr_name ,check_method,pointer: str ):
+def option(check_method,middleware_list=None,min_length = 0 ):
     
     styled_print.info('Введите exit для остановки процесса')
 
@@ -32,14 +33,21 @@ def option( parametr_name ,check_method,pointer: str ):
     
       value = input(styled_print.list_item(f' ',is_print=False))  
 
+
       if value.strip().lower() == 'exit':
 
-        if len(values) > 0:
+        if len(values) > min_length:
          break
         
-        styled_print.warning('Вы должны ввести хотя бы одно значение')
+        styled_print.warning(f'Вы должны ввести хотя бы {min_length + 1}')
 
         continue
+
+      if middleware_list:
+         
+         function, help_value = middleware_list
+
+         value = function(help_value,value)
 
       check = check_method(value)
 
@@ -105,3 +113,6 @@ def added_point(extensions):
    return extensions
       
 
+def middleware_folders(area_work,path):
+   
+   return join(area_work,path)
