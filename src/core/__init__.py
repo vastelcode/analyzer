@@ -16,10 +16,11 @@ class Core:
   def run(self):
      
    try:
-
-    #  получаем данные пользователя
-      user_data = self.input_manager.run()
     
+    interface = self.input_manager.choice_interface()
+
+    user_data = {}
+
     #   user_data = {
     #     'type_search': 'deep',
     #     'mode_work': 'fs',
@@ -29,14 +30,15 @@ class Core:
     #     'output_place': '/home/maksim/Тест/result.txt',
     #     'folders_exceptions': ['/home/maksim/Тест/dir']
     #  }
-    
+
+    if interface == 'cli':
+    #  получаем данные пользователя
+      user_data = self.input_manager.run()
     # поиск
-      result_search = Search(user_data).run()
+    result_search = Search(user_data).run()
 
-
-    
     # вывод результатов
-      output.run(result_search, user_data['output_place'])
+    output.run(result_search, user_data['output_place'])
 
 
    except KeyboardInterrupt:

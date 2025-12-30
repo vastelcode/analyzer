@@ -12,6 +12,13 @@ from ..validation import validator
 
 class Input:
 
+  # выбор варианта взаимодействия
+  def choice_interface(self):
+     
+     result = prompt(**prompts['mode_interface'])
+
+     return result
+
   # запуск пользователься ввода
   def run(self):
 
@@ -68,7 +75,7 @@ class Input:
          'area_work': area_work,
          'type_search': type_search,
          'extensions_list': extensions_list,
-         'folder_exceptions': folders_exceptions,
+         'folders_exceptions': folders_exceptions,
          'regex_list': regex_list,
          'output_place': output_place
       }
